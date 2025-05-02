@@ -36,6 +36,7 @@ body {
   justify-content: center;
   align-items: center;
   background-image: linear-gradient(var(--bg0), var(--bg1));
+  font-family: var(--font-rounded-sans);
 }
 
 main {
@@ -68,13 +69,6 @@ dialog[open] {
   border-bottom-right-radius: var(--radius-3);
   box-shadow: var(--shadow-1);
 
-  button {
-    position: absolute;
-    bottom: var(--size-3);
-    right: var(--size-3);
-    border-radius: var(--radius-2);
-    box-shadow: var(--shadow-2);
-  }
 
   textarea {
     height: 100%;
@@ -83,6 +77,24 @@ dialog[open] {
     margin: 0;
     padding: var(--size-3);
     border-radius: 0%;
+    letter-spacing: var(--font-letterspacing-2);
+    font-family: var(--font-antique);
+  }
+}
+
+button {
+  position: absolute;
+  bottom: var(--size-3);
+  right: var(--size-3);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-1);
+  font-weight: 600;
+  background: var(--bg0);
+  border: var(--size-px-1) solid var(--bg1);
+
+  &:active {
+    transform: scale(0.9);
+    background: var(--bg1);
   }
 }
 
@@ -105,18 +117,6 @@ a {
     text-decoration: none;
   }
 
-  button {
-    position: absolute;
-    bottom: var(--size-3);
-    right: var(--size-3);
-    border-radius: var(--radius-2);
-    font-weight: bold;
-    box-shadow: var(--shadow-1);
-
-    &:active {
-      transform: scale(0.9);
-    }
-  }
 }
 
 #noteList {
@@ -134,6 +134,9 @@ a {
     box-shadow: var(--shadow-2);
 
     p {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
       font-size: var(--font-size-1);
     }
 

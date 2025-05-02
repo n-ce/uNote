@@ -9,17 +9,32 @@ const saveBtn = editor.lastElementChild as HTMLButtonElement;
 const topNoteText = topNote.firstElementChild as HTMLParagraphElement;
 const newBtn = topNote.lastElementChild as HTMLButtonElement;
 
-let newNote = false;
-const notes = {} as { [index: string]: string };
+let savedNotesString = localStorage.getItem('notes');
+let savedNotes;
+if (savedNotesString)
+  savedNotes = JSON.parse(savedNotesString);
+const topNoteSaved = localStorage.getItem('topNote');
+if (topNoteSaved)
+  topNoteText.textContent = topNoteSaved;
 
-function loadEditor(id: string | undefined = undefined) {
+const notes = (savedNotes || {}) as { [index: string]: string };
 
-  if (id) {
-    textarea.value = notes[id];
-    textarea.dataset.id = id;
+function updateSaved() {
+  const notesStr = JSON.stringify(notes);
+  localStorage.setItem('notes', notesStr);
+}
+
+function loadEditor(id: string | undefined | Event = undefined) {
+  if (typeof id !== 'string')
+    id = '';
+
+  if (typeof id === 'undefined') {
+    textarea.value = topNoteText.textContent as string;
   }
+  else if (id)
+    textarea.value = notes[id];
 
-  newNote = id === undefined;
+  textarea.dataset.id = id;
   editor.showModal();
 }
 
@@ -39,15 +54,19 @@ addEventListener('popstate', () => {
 saveBtn.addEventListener('click', () => {
   editor.close();
   if (textarea.value) {
-    const id = newNote ? Date.now().toString() : (textarea.dataset.id as string);
-    notes[id] = textarea.value;
+
+    const id = textarea.dataset.id || Date.now().toString();
+    notes[id] = (localStorage.getItem('topNote') || topNoteText.textContent) as string;
     uNote();
+    topNoteText.textContent = textarea.value;
+    localStorage.setItem('topNote', textarea.value);
   }
+
   textarea.value = '';
 })
 
 
-newBtn.addEventListener('click', () => { loadEditor() });
+newBtn.addEventListener('click', loadEditor);
 
 function uNote() {
   console.log(notes);
@@ -55,17 +74,21 @@ function uNote() {
   const note = (id: string, v: string) => html`<a href="#" @click=${(e: Event) => {
     const elm = e.target as HTMLElement;
     e.preventDefault();
-    if (!elm.matches('button'))
+    if (elm.matches('button')) {
+      delete notes[id];
+      uNote();
+    } else {
       loadEditor(id);
+    }
   }}
     >
       <p>${v}</p>
-      <button @click=${() => {
-      delete notes[id];
-      uNote();
-    }}>del</button>
+      <button>del</button>
     </a>`;
 
+  updateSaved();
   render(noteList, html`${Object.entries(notes).map(([id, text]) => note(id, text))}`)
 }
 
+if (savedNotesString)
+  uNote();
