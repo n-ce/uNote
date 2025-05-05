@@ -1,24 +1,20 @@
 @import "open-props/normalize";
 
 :root {
-  --bg0: var(--teal-0);
-  --bg1: var(--lime-1);
-  --tx: #000d;
+  --bg: var(--teal-0);
+  --tx: var(--teal-12);
   --sf1: var(--teal-1);
-  --sf2: var(--lime-2);
-  --sf1x: var(--teal-2);
-  --sf2x: var(--lime-3);
+  --sf2: var(--teal-2);
   --dv: calc(100dvmin + calc(calc(100dvmax - 100dvmin) / 2));
   --dvh: 100dvh;
   --dvw: 100dvmin;
 
   @media(prefers-color-scheme:dark) {
 
-    --bg1: var(--lime-12);
-    --bg0: var(--teal-11);
-    --tx: #fffd;
-    --sf2: var(--teal-10);
-    --sf1: var(--lime-9);
+    --bg: var(--teal-12);
+    --tx: var(--teal-0);
+    --sf1: var(--teal-10);
+    --sf2: var(--teal-11);
   }
 
   @media(orientation:landscape) {
@@ -37,7 +33,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: linear-gradient(var(--bg0), var(--bg1));
+  background-color: var(--bg);
   font-family: var(--font-rounded-sans);
 }
 
@@ -91,19 +87,19 @@ button {
   border-radius: var(--radius-2);
   box-shadow: var(--shadow-1);
   font-weight: 600;
-  background: var(--bg0);
-  border: calc(var(--size-1) / 2) solid var(--sf1x);
+  background: var(--bg);
+  border: calc(var(--size-1) / 2) solid var(--sf1);
 
   &:active {
     transform: scale(0.9);
-    background: var(--bg1);
+    filter: brightness(2);
   }
 }
 
 a {
   position: relative;
   display: block;
-  background: linear-gradient(to bottom right, var(--sf1x), var(--sf1));
+  background: linear-gradient(to bottom right, var(--sf2), var(--sf1));
   color: var(--tx);
   width: 90dvmin;
   aspect-ratio: 3/2;
@@ -117,6 +113,7 @@ a {
 
   &:hover {
     text-decoration: none;
+    filter: saturate(2)
   }
 
 }
@@ -133,12 +130,7 @@ a {
     background: linear-gradient(to bottom right, var(--sf1), var(--sf2));
     margin-top: 5dvmin;
     aspect-ratio: 3/1;
-    box-shadow: var(--shadow-2);
-    border: calc(var(--size-1) / 2) solid var(--sf1x);
-
-    &:hover {
-      border-width: var(--size-1);
-    }
+    box-shadow: var(--shadow-1);
 
     p {
       height: 100%;
@@ -148,7 +140,7 @@ a {
     }
 
     button {
-      border-color: var(--sf2x);
+      border-color: var(--sf2);
     }
 
     @media(orientation:landscape) {
