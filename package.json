@@ -9,12 +9,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "open-props": "^1.7.15",
+    "postcss-jit-props": "^1.0.16",
     "typescript": "^5.8.3",
-    "vite": "^6.3.4",
-    "postcss-jit-props": "^1.0.16"
+    "vite": "^6.3.5"
   },
   "dependencies": {
-    "open-props": "^1.7.15",
+    "marked": "^15.0.11",
     "uhtml": "^4.7.1"
   }
 }

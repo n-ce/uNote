@@ -10,7 +10,6 @@
   --dvw: 100dvmin;
 
   @media(prefers-color-scheme:dark) {
-
     --bg: var(--teal-12);
     --tx: var(--teal-0);
     --sf1: var(--teal-10);
@@ -21,9 +20,7 @@
     --dvh: 100dvmin;
     --dvw: var(--dv);
   }
-
 }
-
 
 * {
   transition: all 0.4s ease-out;
@@ -51,32 +48,25 @@ main {
   }
 }
 
-dialog[open] {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100dvw;
-  height: 100dvh;
-  border-radius: 0%;
-  padding: 0;
-  margin: auto;
-  box-shadow: none;
-  overflow: hidden;
+a {
   position: relative;
+  display: block;
+  width: 90dvmin;
+  aspect-ratio: 3/2;
+  padding: 5dvmin;
+  overflow: hidden;
   border-radius: var(--radius-2);
   border-bottom-right-radius: var(--radius-3);
-  box-shadow: var(--shadow-1);
+  box-shadow: var(--inner-shadow-1);
+  background: linear-gradient(to bottom right, var(--sf2), var(--sf1));
+  color: var(--tx);
+  opacity: 0.9;
+  font-weight: 300;
+  letter-spacing: var(--font-letterspacing-2);
 
-
-  textarea {
-    height: 100%;
-    width: 100%;
-    outline: none;
-    margin: 0;
-    padding: var(--size-3);
-    border-radius: 0%;
-    letter-spacing: var(--font-letterspacing-2);
-    font-family: var(--font-antique);
+  &:hover {
+    text-decoration: none;
+    filter: saturate(2);
   }
 }
 
@@ -84,11 +74,11 @@ button {
   position: absolute;
   bottom: var(--size-3);
   right: var(--size-3);
+  border: calc(var(--size-1) / 2) solid var(--sf1);
   border-radius: var(--radius-2);
   box-shadow: var(--shadow-1);
-  font-weight: 600;
   background: var(--bg);
-  border: calc(var(--size-1) / 2) solid var(--sf1);
+  font-weight: 600;
 
   &:active {
     transform: scale(0.9);
@@ -96,40 +86,18 @@ button {
   }
 }
 
-a {
-  position: relative;
-  display: block;
-  background: linear-gradient(to bottom right, var(--sf2), var(--sf1));
-  color: var(--tx);
-  width: 90dvmin;
-  aspect-ratio: 3/2;
-  padding: 5dvmin;
-  border-radius: var(--radius-2);
-  opacity: 0.9;
-  font-weight: 300;
-  letter-spacing: var(--font-letterspacing-2);
-  border-bottom-right-radius: var(--radius-3);
-  box-shadow: var(--inner-shadow-1);
-
-  &:hover {
-    text-decoration: none;
-    filter: saturate(2)
-  }
-
-}
-
 #noteList {
   height: calc(var(--dv) - 100dvmin);
 
   @media(orientation:landscape) {
-    overflow: scroll;
     height: 90dvmin;
+    overflow: scroll;
   }
 
   a {
-    background: linear-gradient(to bottom right, var(--sf1), var(--sf2));
     margin-top: 5dvmin;
     aspect-ratio: 3/1;
+    background: linear-gradient(to bottom right, var(--sf1), var(--sf2));
     box-shadow: var(--shadow-1);
 
     p {
@@ -144,10 +112,43 @@ a {
     }
 
     @media(orientation:landscape) {
-      margin-bottom: 5dvmin;
       margin-top: 0;
       margin-left: 5dvmin;
+      margin-bottom: 5dvmin;
       width: calc(var(--dv) - 105dvh);
     }
   }
+}
+
+dialog[open] {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100dvw;
+  height: 100dvh;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  border-radius: 0%;
+  border-radius: var(--radius-2);
+  border-bottom-right-radius: var(--radius-3);
+  box-shadow: none;
+  box-shadow: var(--shadow-1);
+
+  textarea {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: var(--size-3);
+    outline: none;
+    border-radius: 0%;
+    font-family: var(--font-antique);
+    letter-spacing: var(--font-letterspacing-2);
+  }
+}
+
+strong {
+  font-weight: 600;
 }

@@ -1,5 +1,6 @@
 import { html, render } from 'uhtml';
 import './style.css';
+import { marked } from 'marked';
 
 const editor = document.getElementById('editor') as HTMLDialogElement;
 const topNote = document.getElementById('topNote') as HTMLAnchorElement;
@@ -15,32 +16,38 @@ if (savedNotesString)
   savedNotes = JSON.parse(savedNotesString);
 const topNoteSaved = localStorage.getItem('topNote');
 if (topNoteSaved)
-  topNoteText.textContent = topNoteSaved;
+  topNoteText.innerHTML = marked(topNoteSaved) as string;
 
 const notes = (savedNotes || {}) as { [index: string]: string };
+
+const getTopNote = () => localStorage.getItem('topNote') || topNoteText.textContent || '';
 
 function updateSaved() {
   const notesStr = JSON.stringify(notes);
   localStorage.setItem('notes', notesStr);
 }
 
-function loadEditor(id: string | undefined | Event = undefined) {
-  if (typeof id !== 'string')
-    id = '';
+function loadEditor(
+  src: 'top' | 'note' | 'new',
+  id: string | undefined = undefined
+) {
 
-  if (typeof id === 'undefined') {
-    textarea.value = topNoteText.textContent as string;
-  }
-  else if (id)
+  if (src === 'top')
+    textarea.value = getTopNote();
+  if (src === 'new')
+    textarea.value = '';
+  if (src === 'note' && id)
     textarea.value = notes[id];
 
-  textarea.dataset.id = id;
+  textarea.dataset.id = id || src;
   editor.showModal();
 }
 
 topNote.addEventListener('click', e => {
+  if ((e.target as HTMLAnchorElement).matches('button')) return;
   e.preventDefault();
-  loadEditor();
+  loadEditor('top');
+
 })
 
 addEventListener('popstate', () => {
@@ -55,10 +62,12 @@ saveBtn.addEventListener('click', () => {
   editor.close();
   if (textarea.value) {
 
-    const id = textarea.dataset.id || Date.now().toString();
-    notes[id] = (localStorage.getItem('topNote') || topNoteText.textContent) as string;
-    uNote();
-    topNoteText.textContent = textarea.value;
+    const id = textarea.dataset.id === 'new' ? Date.now().toString() : textarea.dataset.id;
+    if (id && id !== 'top') {
+      notes[id] = getTopNote();
+      uNote();
+    }
+    topNoteText.innerHTML = marked(textarea.value) as string;
     localStorage.setItem('topNote', textarea.value);
   }
 
@@ -66,25 +75,33 @@ saveBtn.addEventListener('click', () => {
 })
 
 
-newBtn.addEventListener('click', loadEditor);
+newBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  loadEditor('new')
+});
 
 function uNote() {
   console.log(notes);
 
-  const note = (id: string, v: string) => html`<a href="#" @click=${(e: Event) => {
-    const elm = e.target as HTMLElement;
-    e.preventDefault();
-    if (elm.matches('button')) {
-      delete notes[id];
-      uNote();
-    } else {
-      loadEditor(id);
+  function note(id: string, v: string) {
+    function handleclick(e: Event) {
+      const elm = e.target as HTMLElement;
+      e.preventDefault();
+      if (elm.matches('button')) {
+        delete notes[id];
+        uNote();
+      } else {
+        loadEditor('note', id);
+      }
     }
-  }}
-    >
-      <p>${v}</p>
+    const p = document.createElement('p');
+    p.innerHTML = marked(v) as string;
+
+    return html`<a href="#" @click=${handleclick}>
+      ${p}
       <button>del</button>
     </a>`;
+  }
 
   updateSaved();
   render(noteList, html`${Object.entries(notes).map(([id, text]) => note(id, text))}`)
