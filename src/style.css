@@ -153,6 +153,6 @@ strong {
   font-weight: 600;
 }
 
-ul {
+ol, ul {
   padding-inline-start: var(--size-4);
 }
